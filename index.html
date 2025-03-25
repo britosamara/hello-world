@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hello World com Gmail</title>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 80px;
+    }
+    #welcome {
+      margin-top: 30px;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Projeto Hello World</h1>
+  <div id="buttonDiv"></div>
+  <div id="welcome"></div>
+
+  <script>
+    function parseJwt(token) {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(atob(base64).split('').map(c =>
+        '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+      ).join(''));
+      return JSON.parse(jsonPayload);
+    }
+
+    function handleCredentialResponse(response) {
+      const data = parseJwt(response.credential);
+      document.getElementById("welcome").innerText = `Olá, ${data.name}!`;
+    }
+
+    async function iniciarLogin() {
+      const res = await fetch("https://client-id-api.vercel.app/api/client-id");
+      const { clientId } = await res.json();
+
+      google.accounts.id.initialize({
+        client_id: clientId,
+        callback: handleCredentialResponse,
+        ux_mode: "popup"
+      });
+
+      google.accounts.id.renderButton(
+        document.getElementById("buttonDiv"),
+        { theme: "outline", size: "large", text: "signin_with", logo_alignment: "left" }
+      );
+    }
+
+    window.onload = iniciarLogin;
+  </script>
+</body>
+</html>
