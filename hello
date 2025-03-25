@@ -1,0 +1,28 @@
+<!DOCTYPE html >
+< html >
+  < cabeça >
+    < meta  charset =" utf-8 " />
+    < title > Olá Analytics - Um guia de início rápido para JavaScript </ title >
+  </ cabeça >
+  < corpo >
+    < h1 > ENTRAR NO GOOGLE </ h1 >
+    
+    < roteiro >
+      var  CLIENT_ID  =  'SEU_CLIENTE_ID' ;
+
+      janela . carregar  =  função  ( )  {
+        const  cliente  =  google . contas . oauth2 . initTokenClient ( {
+          client_id : ID_DO_CLIENTE ,
+          escopo :
+            'https://www.googleapis.com/auth/analytics.readonly https://www.googleapis.com/auth/analytics.edit' ,
+          retorno de chamada : ( resposta )  =>  {
+            console . log ( 'resposta : ' ,  resposta.access_token ) ;
+          } ,
+        } ) ;
+        cliente . requestAccessToken ( ) ;
+      } ;
+    </ script >
+
+    < script  src =" https://accounts.google.com/gsi/client " async > </ script >
+  </ corpo >
+</ html >
